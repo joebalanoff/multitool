@@ -18,4 +18,9 @@ public class PlayerController : MonoBehaviour
     {
         rb.MovePosition(rb.position + new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized * moveSpeed * Time.fixedDeltaTime);
     }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        StartCoroutine(Camera.main.GetComponent<CameraShake>().shake(0.1f, 0.1f));
+    }
 }
