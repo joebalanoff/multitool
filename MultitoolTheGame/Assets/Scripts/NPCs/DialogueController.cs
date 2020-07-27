@@ -20,6 +20,12 @@ public class DialogueController : MonoBehaviour
 
     public bool canTalk;
 
+    void Start()
+    {
+        dialogueBox.SetActive(false);
+        canTalk = false;
+    }
+
     void Update()
     {
         if (canTalk)
@@ -43,41 +49,36 @@ public class DialogueController : MonoBehaviour
         dialogueText.text = "";
         int currentLine = 0;
 
-        DialogueLine preLine = lines[currentLine];
+        DialogueLine preLine = lines[0];
 
         while(currentLine < lines.Count)
         {
             DialogueLine curLine = lines[currentLine];
-            if(currentLine == 0)
+            if (!curLine.completed)
             {
-                StartCoroutine(sendLine(lines[0]));
+                StartCoroutine(sendLine(curLine));
             } else
             {
-                if (curLine != preLine)
-                {
-                    dialogueText.text = "";
-                    StartCoroutine(sendLine(curLine));
-                }
-            }
-
-            if (dialogueText.text == curLine.line)
-            {
-                if (Input.GetKeyDown(KeyCode.KeypadEnter))ss
-                {
-                    currentLine++;
-                }
+                currentLine++;
             }
         }
+
         StartCoroutine(endChat());
         yield return null;
     }
 
     IEnumerator sendLine(DialogueLine line)
     {
+        if (line != lines[0]) yield return new WaitForSeconds(0.3f);
+        dialogueText.text = "";
         for (int i = 0; i < line.line.Length; i++)
         {
             dialogueText.text += line.line[i];
             yield return new WaitForSeconds(0.1f);
+        }
+        if(dialogueText.text == line.line)
+        {
+            line.completed = true;
         }
     }
 
@@ -112,4 +113,6 @@ public class DialogueLine
     public string line;
     public bool question;
     public List<string> options;
+
+    public bool completed = false;
 }
