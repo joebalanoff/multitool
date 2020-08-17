@@ -5,5 +5,12 @@ using UnityEngine;
 
 public class ToolController : MonoBehaviour
 {
+    public Animation animation;
+    public GameObject giveItem;
 
+    public void Interact() {
+        if(animation != null)
+            animation.Play();
+        Destroy(gameObject);
+    }
 }
