@@ -19,11 +19,14 @@ public class CameraController : MonoBehaviour
         transform.position = target.position + offset;
     }
 
-    void LateUpdate()
-    {
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, minPos.x, maxPos.x), Mathf.Clamp(transform.position.y, minPos.y, maxPos.y), transform.position.z);
-
+    void LateUpdate() {
         if (Vector2.Distance(target.position, transform.position) > whiteSpace)
-            transform.position = Vector3.Slerp(transform.position, target.position + offset, moveSpeed);
+            transform.position = Vector3.Lerp(transform.position, target.position + offset, moveSpeed * Time.deltaTime);
+
+        Vector3 clamped = new Vector3(Mathf.Clamp(transform.position.x, minPos.x, maxPos.x),
+            Mathf.Clamp(transform.position.y, minPos.y, maxPos.y),
+            transform.position.z);
+
+        transform.position = clamped;
     }
 }
